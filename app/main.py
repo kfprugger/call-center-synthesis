@@ -40,7 +40,6 @@ audio_generator = AudioGenerator()
 data_generator = SyntheticDataGenerator()
 
 generated_calls_storage: Dict[str, List[GeneratedCall]] = {}
-audio_files_storage: Dict[str, bytes] = {}
 
 @app.get("/healthz")
 async def healthz():
@@ -94,14 +93,14 @@ async def generate_calls(request: CallGenerationRequest):
                     'sampling_rate': request.audio_settings.sampling_rate,
                     'channels': request.audio_settings.channels
                 }
-                audio_bytes = audio_generator.generate_audio(
+                audio_id = f"{session_id}_call_{i+1}"
+                audio_file_path = audio_generator.generate_audio(
                     transcript_data['transcript'],
-                    audio_settings
+                    audio_settings,
+                    audio_id
                 )
                 
-                if audio_bytes:
-                    audio_id = f"{session_id}_call_{i+1}"
-                    audio_files_storage[audio_id] = audio_bytes
+                if audio_file_path:
                     audio_file_url = f"/audio/{audio_id}"
             
             generated_call = GeneratedCall(
@@ -129,18 +128,19 @@ async def generate_calls(request: CallGenerationRequest):
 @app.get("/audio/{audio_id}")
 async def get_audio_file(audio_id: str):
     """Retrieve generated audio file."""
+    from fastapi.responses import FileResponse
+    import os
     
-    if audio_id not in audio_files_storage:
+    audio_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_audio')
+    file_path = os.path.join(audio_dir, f"{audio_id}.wav")
+    
+    if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Audio file not found")
     
-    audio_bytes = audio_files_storage[audio_id]
-    
-    return Response(
-        content=audio_bytes,
+    return FileResponse(
+        path=file_path,
         media_type="audio/wav",
-        headers={
-            "Content-Disposition": f"attachment; filename={audio_id}.wav"
-        }
+        filename=f"{audio_id}.wav"
     )
 
 @app.get("/scenarios")
@@ -187,29 +187,38 @@ async def get_audio_settings():
 @app.delete("/cleanup/{session_id}")
 async def cleanup_session(session_id: str):
     """Clean up stored data for a session."""
+    import os
+    import glob
     
     if session_id in generated_calls_storage:
         del generated_calls_storage[session_id]
     
-    audio_keys_to_remove = [key for key in audio_files_storage.keys() if key.startswith(session_id)]
-    for key in audio_keys_to_remove:
-        del audio_files_storage[key]
+    audio_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_audio')
+    audio_files = glob.glob(os.path.join(audio_dir, f"{session_id}_*.wav"))
+    for file_path in audio_files:
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass  # File already deleted or doesn't exist
     
     return {"message": f"Session {session_id} cleaned up successfully"}
 
 @app.get("/stats")
 async def get_stats():
     """Get API usage statistics."""
+    import os
+    import glob
+    
     total_sessions = len(generated_calls_storage)
     total_calls = sum(len(calls) for calls in generated_calls_storage.values())
-    total_audio_files = len(audio_files_storage)
+    
+    audio_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_audio')
+    audio_files = glob.glob(os.path.join(audio_dir, "*.wav")) if os.path.exists(audio_dir) else []
+    total_audio_files = len(audio_files)
     
     return {
         "total_sessions": total_sessions,
         "total_calls_generated": total_calls,
         "total_audio_files": total_audio_files,
-        "memory_usage": {
-            "calls_storage_mb": round(len(str(generated_calls_storage)) / (1024 * 1024), 2),
-            "audio_storage_mb": round(sum(len(audio) for audio in audio_files_storage.values()) / (1024 * 1024), 2)
-        }
+        "audio_directory": audio_dir
     }

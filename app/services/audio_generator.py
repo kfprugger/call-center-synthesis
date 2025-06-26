@@ -6,7 +6,7 @@ from pydub import AudioSegment
 from pydub.generators import Sine
 import tempfile
 import os
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Union
 import base64
 
 class AudioGenerator:
@@ -16,8 +16,8 @@ class AudioGenerator:
             'caller': {'lang': 'en', 'tld': 'ca', 'slow': False}  # Different accent for variety
         }
     
-    def generate_audio(self, transcript: str, audio_settings: Dict) -> Optional[bytes]:
-        """Generate audio file from transcript."""
+    def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None) -> Optional[Union[str, bytes]]:
+        """Generate audio file from transcript. Returns file path if audio_id provided, otherwise bytes."""
         try:
             segments = self._parse_transcript(transcript)
             
@@ -42,7 +42,10 @@ class AudioGenerator:
             
             final_audio = self._apply_audio_settings(combined_audio, audio_settings)
             
-            return self._to_wav_bytes(final_audio, audio_settings)
+            if audio_id:
+                return self._save_to_file(final_audio, audio_settings, audio_id)
+            else:
+                return self._to_wav_bytes(final_audio, audio_settings)
             
         except Exception as e:
             print(f"Error generating audio: {e}")
@@ -131,6 +134,27 @@ class AudioGenerator:
         wav_buffer.seek(0)
         return wav_buffer.getvalue()
     
+    def _save_to_file(self, audio: AudioSegment, settings: Dict, audio_id: str) -> str:
+        """Save AudioSegment to WAV file and return file path."""
+        import os
+        
+        audio_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'generated_audio')
+        os.makedirs(audio_dir, exist_ok=True)
+        
+        file_path = os.path.join(audio_dir, f"{audio_id}.wav")
+        
+        audio.export(
+            file_path,
+            format="wav",
+            parameters=[
+                "-acodec", "pcm_s16le",  # 16-bit PCM
+                "-ar", str(settings.get('sampling_rate', 16000)),  # Sample rate
+                "-ac", str(settings.get('channels', 1))  # Channels
+            ]
+        )
+        
+        return file_path
+
     def simulate_phone_quality(self, audio: AudioSegment) -> AudioSegment:
         """Apply phone-like audio filtering."""
         
