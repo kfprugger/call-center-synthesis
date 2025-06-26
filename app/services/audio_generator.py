@@ -1,7 +1,7 @@
 import io
 import wave
 import numpy as np
-from gtts import gTTS
+import azure.cognitiveservices.speech as speechsdk
 from pydub import AudioSegment
 from pydub.generators import Sine
 import tempfile
@@ -12,8 +12,8 @@ import base64
 class AudioGenerator:
     def __init__(self):
         self.voice_settings = {
-            'agent': {'lang': 'en', 'tld': 'com', 'slow': False},  # US English, professional tone
-            'caller': {'lang': 'en', 'tld': 'co.uk', 'slow': True}  # UK English, slightly slower pace
+            'agent': {'voice_name': 'en-US-JennyNeural'},  # US English, professional female voice
+            'caller': {'voice_name': 'en-GB-SoniaNeural'}  # UK English, professional female voice
         }
     
     def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None) -> Optional[Union[str, bytes]]:
@@ -87,28 +87,40 @@ class AudioGenerator:
         return audio
     
     def _text_to_speech(self, text: str, voice_config: Dict) -> Optional[AudioSegment]:
-        """Convert text to speech using gTTS."""
+        """Convert text to speech using Azure Speech SDK."""
         try:
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as temp_file:
+            speech_config = speechsdk.SpeechConfig(
+                subscription=os.environ.get('SPEECH_KEY'),
+                region="westus3"
+            )
+            speech_config.speech_synthesis_voice_name = voice_config['voice_name']
+            
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
                 temp_filename = temp_file.name
             
-            tts = gTTS(
-                text=text,
-                lang=voice_config['lang'],
-                tld=voice_config['tld'],
-                slow=voice_config['slow']
+            audio_config = speechsdk.audio.AudioOutputConfig(filename=temp_filename)
+            
+            speech_synthesizer = speechsdk.SpeechSynthesizer(
+                speech_config=speech_config, 
+                audio_config=audio_config
             )
             
-            tts.save(temp_filename)
+            speech_synthesis_result = speech_synthesizer.speak_text_async(text).get()
             
-            audio = AudioSegment.from_mp3(temp_filename)
-            
-            os.unlink(temp_filename)
-            
-            return audio
-            
+            if speech_synthesis_result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+                audio = AudioSegment.from_wav(temp_filename)
+                os.unlink(temp_filename)
+                return audio
+            else:
+                print(f"Speech synthesis failed: {speech_synthesis_result.reason}")
+                if speech_synthesis_result.reason == speechsdk.ResultReason.Canceled:
+                    cancellation_details = speech_synthesis_result.cancellation_details
+                    print(f"Error details: {cancellation_details.error_details}")
+                os.unlink(temp_filename)
+                return None
+                
         except Exception as e:
-            print(f"Error in text-to-speech: {e}")
+            print(f"Error in Azure text-to-speech: {e}")
             return None
     
     def _apply_audio_settings(self, audio: AudioSegment, settings: Dict) -> AudioSegment:

@@ -8,6 +8,9 @@ import base64
 from typing import Dict, List
 import uuid
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from .models import (
     CallGenerationRequest, 
