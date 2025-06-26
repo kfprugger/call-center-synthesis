@@ -302,6 +302,17 @@ uvicorn = {version = ">=0.15.0", extras = ["standard"]}
 standard = ["uvicorn[standard] (>=0.15.0)"]
 
 [[package]]
+name = "gender-guesser"
+version = "0.4.0"
+description = "Get the gender from first name."
+optional = false
+python-versions = "*"
+files = [
+    {file = "gender-guesser-0.4.0.tar.gz", hash = "sha256:1591c14592805ca7da06a46d5f7202511f7cb87547049a68dfccbeedb879f31b"},
+    {file = "gender_guesser-0.4.0-py2.py3-none-any.whl", hash = "sha256:7cb01ce5d8d43b94573498bc02c959b622872abd399622ca67d1b73ba6e7e222"},
+]
+
+[[package]]
 name = "h11"
 version = "0.16.0"
 description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
@@ -1454,4 +1465,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "a395dfa7f57198145cc555e0cec1186b7c39d933c578acc9e82053081a01d035"
+content-hash = "d2ce49fbd4e969aeb2b37ac9711659302fa4ed85d1aaa3831e0635e2551b300a"

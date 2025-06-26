@@ -8,13 +8,37 @@ import tempfile
 import os
 from typing import Dict, Optional, Tuple, Union
 import base64
+import gender_guesser.detector as gender
 
 class AudioGenerator:
     def __init__(self):
         self.voice_settings = {
-            'agent': {'voice_name': 'en-US-JennyNeural'},  # US English, professional female voice
-            'caller': {'voice_name': 'en-GB-SoniaNeural'}  # UK English, professional female voice
+            'agent': {
+                'male': {'voice_name': 'en-US-BrianNeural'},    # US English, professional male voice
+                'female': {'voice_name': 'en-US-JennyNeural'}   # US English, professional female voice
+            },
+            'caller': {
+                'male': {'voice_name': 'en-GB-RyanNeural'},     # UK English, professional male voice  
+                'female': {'voice_name': 'en-GB-SoniaNeural'}   # UK English, professional female voice
+            }
         }
+    
+    def _detect_gender_from_name(self, name: str) -> str:
+        """Detect gender from a given name. Returns 'male' or 'female'."""
+        d = gender.Detector()
+        
+        first_name = name.split()[0] if ' ' in name else name
+        
+        first_name = first_name.replace('Dr.', '').replace('Mr.', '').replace('Ms.', '').replace('Mrs.', '').strip()
+        
+        gender_result = d.get_gender(first_name)
+        
+        if gender_result in ['male', 'mostly_male']:
+            return 'male'
+        elif gender_result in ['female', 'mostly_female']:
+            return 'female'
+        else:
+            return 'female'
     
     def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None) -> Optional[Union[str, bytes]]:
         """Generate audio file from transcript. Returns file path if audio_id provided, otherwise bytes."""
@@ -24,7 +48,9 @@ class AudioGenerator:
             audio_segments = []
             
             for i, (speaker, text) in enumerate(segments):
-                voice_config = self._get_voice_config(speaker)
+                speaker_name = self._extract_name_from_speaker(speaker, transcript)
+                voice_config = self._get_voice_config(speaker, speaker_name)
+                
                 
                 segment_audio = self._text_to_speech(text, voice_config)
                 
@@ -69,12 +95,34 @@ class AudioGenerator:
         
         return segments
     
-    def _get_voice_config(self, speaker: str) -> Dict:
-        """Get voice configuration based on speaker."""
-        if 'agent' in speaker.lower():
-            return self.voice_settings['agent']
+    def _get_voice_config(self, speaker: str, speaker_name: Optional[str] = None) -> Dict:
+        """Get voice configuration based on speaker type and name gender."""
+        speaker_type = 'agent' if 'agent' in speaker.lower() else 'caller'
+        
+        if speaker_name:
+            gender = self._detect_gender_from_name(speaker_name)
+            return self.voice_settings[speaker_type][gender]
         else:
-            return self.voice_settings['caller']
+            return self.voice_settings[speaker_type]['female']
+    
+    def _extract_name_from_speaker(self, speaker: str, transcript_text: Optional[str] = None) -> str:
+        """Extract the actual name from speaker label or transcript context."""
+        if 'Agent' in speaker and transcript_text:
+            import re
+            agent_intro_pattern = r'this is (\w+)'
+            match = re.search(agent_intro_pattern, transcript_text, re.IGNORECASE)
+            if match:
+                return match.group(1)
+        
+        if 'Agent' in speaker:
+            parts = speaker.split()
+            if len(parts) > 1:
+                return ' '.join(parts[1:])  # Return everything after "Agent"
+            else:
+                return speaker  # Fallback to full speaker label
+        else:
+            name = speaker.replace('Dr.', '').replace('Mr.', '').replace('Ms.', '').replace('Mrs.', '').strip()
+            return name if name else speaker
     
     def _apply_voice_characteristics(self, audio: AudioSegment, speaker: str) -> AudioSegment:
         """Apply voice characteristics to differentiate speakers."""
