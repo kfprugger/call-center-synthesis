@@ -12,8 +12,8 @@ import base64
 class AudioGenerator:
     def __init__(self):
         self.voice_settings = {
-            'agent': {'lang': 'en', 'tld': 'com', 'slow': False},
-            'caller': {'lang': 'en', 'tld': 'ca', 'slow': False}  # Different accent for variety
+            'agent': {'lang': 'en', 'tld': 'com', 'slow': False},  # US English, professional tone
+            'caller': {'lang': 'en', 'tld': 'co.uk', 'slow': True}  # UK English, slightly slower pace
         }
     
     def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None) -> Optional[Union[str, bytes]]:
@@ -29,6 +29,7 @@ class AudioGenerator:
                 segment_audio = self._text_to_speech(text, voice_config)
                 
                 if segment_audio:
+                    segment_audio = self._apply_voice_characteristics(segment_audio, speaker)
                     audio_segments.append(segment_audio)
                     
                     if i < len(segments) - 1:
@@ -74,6 +75,16 @@ class AudioGenerator:
             return self.voice_settings['agent']
         else:
             return self.voice_settings['caller']
+    
+    def _apply_voice_characteristics(self, audio: AudioSegment, speaker: str) -> AudioSegment:
+        """Apply voice characteristics to differentiate speakers."""
+        if 'agent' in speaker.lower():
+            audio = audio + 2  # Slightly increase volume
+            audio = audio.speedup(playback_speed=1.05)  # Slightly faster, professional pace
+        else:
+            audio = audio - 1  # Slightly decrease volume
+        
+        return audio
     
     def _text_to_speech(self, text: str, voice_config: Dict) -> Optional[AudioSegment]:
         """Convert text to speech using gTTS."""

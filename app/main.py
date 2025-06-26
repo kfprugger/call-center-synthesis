@@ -93,7 +93,9 @@ async def generate_calls(request: CallGenerationRequest):
                     'sampling_rate': request.audio_settings.sampling_rate,
                     'channels': request.audio_settings.channels
                 }
-                audio_id = f"{session_id}_call_{i+1}"
+                from datetime import datetime
+                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+                audio_id = f"contoso_call_{timestamp}_call_{i+1}"
                 audio_file_path = audio_generator.generate_audio(
                     transcript_data['transcript'],
                     audio_settings,
