@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:07:09.435711
+Scenario: patient_visit
+Sentiment: negative
+Duration: 4 minutes
+Participants: Agent, Billy Castaneda
+
+==================================================
+
+Agent: Good morning, Contoso Medical, this is Alexander. How may I assist you?
+Billy Castaneda: Hi, I'm calling about my recent visit to Contoso Cardiac Institute on 06/02/2025.
+Agent: Hello, Billy Castaneda. I'd be happy to help you with questions about your visit. Can you verify your date of birth for me?
+Billy Castaneda: Yes, it's 08/22/2005.
+Agent: Thank you. I have your record here. What questions do you have about your visit?
+Billy Castaneda: I'm very upset about my experience. I waited over three hours to be seen.
+Agent: I'm so sorry to hear about the long wait time. That's definitely not the experience we want for our patients.
+Billy Castaneda: And then the doctor seemed rushed and didn't explain my Migraine properly.
+Agent: I sincerely apologize. Let me connect you with our patient advocate to address these concerns.
+Billy Castaneda: I also received a bill that seems incorrect. The charges don't match what I was told.
+Agent: I understand your frustration. I'm going to have both our billing department and patient advocate reach out to you today.
+Billy Castaneda: This whole experience has been disappointing. I expected better from Contoso Medical.
+Agent: You have every right to be upset, and we're going to make this right. You'll hear from us within 24 hours.

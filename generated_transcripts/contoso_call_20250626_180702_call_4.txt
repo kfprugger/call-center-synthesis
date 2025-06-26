@@ -1,0 +1,23 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:07:02.587883
+Scenario: healthcare_provider
+Sentiment: neutral
+Duration: 7 minutes
+Participants: Agent, Dr. Collins
+
+==================================================
+
+Agent: Thank you for calling Contoso Medical, this is Amanda. How can I help you today?
+Dr. Collins: Hi, this is Dr. Collins from Contoso Family Clinic. I'm calling about a patient encounter and need to verify some information.
+Agent: Of course, Dr. Collins. I'd be happy to help. Can you provide me with the patient's information?
+Dr. Collins: Yes, the patient's name is Christina Johnson, date of birth 06/22/1990, and patient ID CTM683968.
+Agent: Thank you. Let me pull up that record... I see the patient here. What specific information do you need?
+Dr. Collins: I need to confirm the details from their visit on 06/05/2025. We're reviewing the Chronic Fatigue Syndrome diagnosis and treatment plan.
+Agent: I can confirm the visit details. The patient was treated for Chronic Fatigue Syndrome as documented.
+Dr. Collins: Good. I also need to verify the prescribed medications from that visit.
+Agent: Let me check the medication list... I see Levothyroxine was prescribed.
+Dr. Collins: That's correct. Can you email me a copy of the complete visit summary?
+Agent: Certainly. I'll send that to your registered email address within the next few minutes.
+Dr. Collins: Thank you. That should be everything I need.
+Agent: You're welcome. Is there anything else I can help you with today?
+Dr. Collins: No, that covers it. Thank you for your assistance.

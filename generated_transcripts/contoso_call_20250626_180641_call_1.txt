@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:06:41.666279
+Scenario: caregiver_inquiry
+Sentiment: negative
+Duration: 4 minutes
+Participants: Agent, Anita Sanders
+
+==================================================
+
+Agent: Contoso Medical, this is Cassandra. How can I help you today?
+Anita Sanders: Hello, I'm calling about my mother, Brittany Jordan. I'm their primary caregiver.
+Agent: Hi Anita Sanders. I'd be happy to help. For privacy purposes, I'll need to verify that you're authorized to discuss this patient's information.
+Anita Sanders: Yes, I should be listed as an authorized contact. My name is Anita Sanders.
+Agent: Thank you. I can confirm you're listed as an authorized caregiver. What questions do you have?
+Anita Sanders: I'm very concerned about Brittany Jordan's condition. They seem to be getting worse, not better.
+Agent: I'm sorry to hear that. Can you tell me more about what changes you've noticed?
+Anita Sanders: The medication doesn't seem to be helping, and they're in more pain than before.
+Agent: That's definitely concerning. Let me check when their last appointment was... I think we need to get them seen sooner.
+Anita Sanders: I've been trying to reach Dr. Mckee for days but haven't heard back.
+Agent: That's unacceptable. I'm going to escalate this immediately and have the doctor call you today.
+Anita Sanders: Brittany Jordan is suffering, and I feel like no one is listening to our concerns.
+Agent: I hear you, and I'm going to make sure this gets the urgent attention it deserves. You'll hear from us within two hours.

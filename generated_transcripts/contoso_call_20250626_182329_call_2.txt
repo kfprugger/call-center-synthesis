@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:23:29.264067
+Scenario: patient_visit
+Sentiment: negative
+Duration: 5 minutes
+Participants: Agent, Michelle Anderson
+
+==================================================
+
+Agent: Good morning, Contoso Medical, this is Stephen. How may I assist you?
+Michelle Anderson: Hi, I'm calling about my recent visit to Contoso Specialty Center on 06/22/2025.
+Agent: Hello, Michelle Anderson. I'd be happy to help you with questions about your visit. Can you verify your date of birth for me?
+Michelle Anderson: Yes, it's 10/08/1997.
+Agent: Thank you. I have your record here. What questions do you have about your visit?
+Michelle Anderson: I'm very upset about my experience. I waited over three hours to be seen.
+Agent: I'm so sorry to hear about the long wait time. That's definitely not the experience we want for our patients.
+Michelle Anderson: And then the doctor seemed rushed and didn't explain my Hypothyroidism properly.
+Agent: I sincerely apologize. Let me connect you with our patient advocate to address these concerns.
+Michelle Anderson: I also received a bill that seems incorrect. The charges don't match what I was told.
+Agent: I understand your frustration. I'm going to have both our billing department and patient advocate reach out to you today.
+Michelle Anderson: This whole experience has been disappointing. I expected better from Contoso Medical.
+Agent: You have every right to be upset, and we're going to make this right. You'll hear from us within 24 hours.
