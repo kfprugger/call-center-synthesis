@@ -44,6 +44,7 @@ class GeneratedCall(BaseModel):
     scenario: str
     transcript_data: TranscriptData
     audio_file_url: Optional[str] = None
+    transcript_file_url: Optional[str] = None
 
 class CallGenerationResponse(BaseModel):
     calls: List[GeneratedCall]

@@ -216,3 +216,26 @@ class TranscriptGenerator:
             ])
         
         return '\n'.join(transcript_parts)
+    
+    def save_transcript_to_file(self, transcript_data: Dict[str, Any], transcript_id: str) -> str:
+        """Save transcript to file and return file path."""
+        import os
+        
+        transcript_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'generated_transcripts')
+        os.makedirs(transcript_dir, exist_ok=True)
+        
+        file_path = os.path.join(transcript_dir, f"{transcript_id}.txt")
+        
+        content = f"Contoso Call Center Transcript\n"
+        content += f"Generated: {transcript_data['metadata']['generated_at']}\n"
+        content += f"Scenario: {transcript_data['scenario']}\n"
+        content += f"Sentiment: {transcript_data['sentiment']}\n"
+        content += f"Duration: {transcript_data['duration']}\n"
+        content += f"Participants: {', '.join(transcript_data['participants'])}\n"
+        content += f"\n{'='*50}\n\n"
+        content += transcript_data['transcript']
+        
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        return file_path

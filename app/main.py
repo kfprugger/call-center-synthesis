@@ -87,14 +87,19 @@ async def generate_calls(request: CallGenerationRequest):
             
             transcript_model = TranscriptData(**transcript_data)
             
+            from datetime import datetime
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            
+            transcript_id = f"contoso_call_{timestamp}_call_{i+1}"
+            transcript_file_path = transcript_generator.save_transcript_to_file(transcript_data, transcript_id)
+            transcript_file_url = f"/transcript/{transcript_id}"
+            
             audio_file_url = None
             if request.audio_settings.generate_audio:
                 audio_settings = {
                     'sampling_rate': request.audio_settings.sampling_rate,
                     'channels': request.audio_settings.channels
                 }
-                from datetime import datetime
-                timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
                 audio_id = f"contoso_call_{timestamp}_call_{i+1}"
                 audio_file_path = audio_generator.generate_audio(
                     transcript_data['transcript'],
@@ -109,7 +114,8 @@ async def generate_calls(request: CallGenerationRequest):
                 id=i + 1,
                 scenario=scenario,
                 transcript_data=transcript_model,
-                audio_file_url=audio_file_url
+                audio_file_url=audio_file_url,
+                transcript_file_url=transcript_file_url
             )
             
             generated_calls.append(generated_call)
@@ -143,6 +149,24 @@ async def get_audio_file(audio_id: str):
         path=file_path,
         media_type="audio/wav",
         filename=f"{audio_id}.wav"
+    )
+
+@app.get("/transcript/{transcript_id}")
+async def get_transcript_file(transcript_id: str):
+    """Retrieve generated transcript file."""
+    from fastapi.responses import FileResponse
+    import os
+    
+    transcript_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_transcripts')
+    file_path = os.path.join(transcript_dir, f"{transcript_id}.txt")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Transcript file not found")
+    
+    return FileResponse(
+        path=file_path,
+        media_type="text/plain",
+        filename=f"{transcript_id}.txt"
     )
 
 @app.get("/scenarios")
@@ -203,6 +227,14 @@ async def cleanup_session(session_id: str):
         except OSError:
             pass  # File already deleted or doesn't exist
     
+    transcript_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_transcripts')
+    transcript_files = glob.glob(os.path.join(transcript_dir, f"contoso_call_*_call_*.txt"))
+    for file_path in transcript_files:
+        try:
+            os.remove(file_path)
+        except OSError:
+            pass  # File already deleted or doesn't exist
+    
     return {"message": f"Session {session_id} cleaned up successfully"}
 
 @app.get("/stats")
@@ -218,9 +250,15 @@ async def get_stats():
     audio_files = glob.glob(os.path.join(audio_dir, "*.wav")) if os.path.exists(audio_dir) else []
     total_audio_files = len(audio_files)
     
+    transcript_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_transcripts')
+    transcript_files = glob.glob(os.path.join(transcript_dir, "*.txt")) if os.path.exists(transcript_dir) else []
+    total_transcript_files = len(transcript_files)
+    
     return {
         "total_sessions": total_sessions,
         "total_calls_generated": total_calls,
         "total_audio_files": total_audio_files,
-        "audio_directory": audio_dir
+        "total_transcript_files": total_transcript_files,
+        "audio_directory": audio_dir,
+        "transcript_directory": transcript_dir
     }
