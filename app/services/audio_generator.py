@@ -272,23 +272,33 @@ class AudioGenerator:
         print(f"Debug: Saving to file path: {file_path}")
 
         try:
-            audio.export(
-                file_path,
-                format="wav",
-                parameters=[
-                    "-acodec", "pcm_s16le",  # 16-bit PCM
-                    "-ar", str(settings.get('sampling_rate', 16000)),  # Sample rate
-                    "-ac", str(settings.get('channels', 1))  # Channels
-                ]
-            )
+            try:
+                print("Debug: Attempting direct WAV export (no ffmpeg dependency)...")
+                audio.export(file_path, format="wav")
+                print("Debug: Direct WAV export successful")
+            except Exception as direct_error:
+                print(f"Debug: Direct WAV export failed: {direct_error}")
+                print("Debug: Trying WAV export with explicit parameters (requires ffmpeg)...")
+                
+                audio.export(
+                    file_path,
+                    format="wav",
+                    parameters=[
+                        "-acodec", "pcm_s16le",  # 16-bit PCM
+                        "-ar", str(settings.get('sampling_rate', 16000)),  # Sample rate
+                        "-ac", str(settings.get('channels', 1))  # Channels
+                    ]
+                )
+                print("Debug: Parametric WAV export successful")
             
             if os.path.exists(file_path):
                 file_size = os.path.getsize(file_path)
                 print(f"Debug: File created successfully - Size: {file_size} bytes")
                 if file_size == 0:
                     print("Debug: WARNING - File has 0 bytes!")
+                return file_path
             else:
-                print("Debug: ERROR - File was not created!")
+                raise FileNotFoundError(f"File was not created: {file_path}")
                 
         except Exception as e:
             print(f"Debug: Error during audio export: {e}")
