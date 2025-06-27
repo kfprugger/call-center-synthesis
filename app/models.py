@@ -22,6 +22,7 @@ class AudioSettings(BaseModel):
     sampling_rate: int = 16000  # 8000, 16000, 32000, 48000
     channels: int = 1  # 1 for mono, 2 for stereo
     generate_audio: bool = True
+    save_audio_locally: bool = True
 
 class CallGenerationRequest(BaseModel):
     scenarios: List[ScenarioType]
@@ -29,6 +30,7 @@ class CallGenerationRequest(BaseModel):
     duration: DurationType = DurationType.MEDIUM
     num_calls: int = 5
     audio_settings: AudioSettings = AudioSettings()
+    save_transcripts_locally: bool = True
 
 class TranscriptData(BaseModel):
     transcript: str

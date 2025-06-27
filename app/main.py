@@ -43,6 +43,8 @@ audio_generator = AudioGenerator()
 data_generator = SyntheticDataGenerator()
 
 generated_calls_storage: Dict[str, List[GeneratedCall]] = {}
+in_memory_transcripts: Dict[str, str] = {}
+in_memory_audio: Dict[str, bytes] = {}
 
 @app.get("/healthz")
 async def healthz():
@@ -94,8 +96,17 @@ async def generate_calls(request: CallGenerationRequest):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             
             transcript_id = f"contoso_call_{timestamp}_call_{i+1}"
-            transcript_file_path = transcript_generator.save_transcript_to_file(transcript_data, transcript_id)
-            transcript_file_url = f"/transcript/{transcript_id}"
+            transcript_result = transcript_generator.save_transcript_to_file(
+                transcript_data, 
+                transcript_id, 
+                save_locally=request.save_transcripts_locally
+            )
+            
+            if request.save_transcripts_locally and transcript_result['file_path']:
+                transcript_file_url = f"/transcript/{transcript_id}"
+            else:
+                in_memory_transcripts[transcript_id] = transcript_result['content']
+                transcript_file_url = f"/transcript/{transcript_id}"
             
             audio_file_url = None
             if request.audio_settings.generate_audio:
@@ -104,14 +115,19 @@ async def generate_calls(request: CallGenerationRequest):
                     'channels': request.audio_settings.channels
                 }
                 audio_id = f"contoso_call_{timestamp}_call_{i+1}"
-                audio_file_path = audio_generator.generate_audio(
+                audio_result = audio_generator.generate_audio(
                     transcript_data['transcript'],
                     audio_settings,
-                    audio_id
+                    audio_id,
+                    save_locally=request.audio_settings.save_audio_locally
                 )
                 
-                if audio_file_path:
-                    audio_file_url = f"/audio/{audio_id}"
+                if audio_result:
+                    if isinstance(audio_result, str) and os.path.exists(audio_result):
+                        audio_file_url = f"/audio/{audio_id}"
+                    elif isinstance(audio_result, bytes):
+                        in_memory_audio[audio_id] = audio_result
+                        audio_file_url = f"/audio/{audio_id}"
             
             generated_call = GeneratedCall(
                 id=i + 1,
@@ -138,39 +154,53 @@ async def generate_calls(request: CallGenerationRequest):
 
 @app.get("/audio/{audio_id}")
 async def get_audio_file(audio_id: str):
-    """Retrieve generated audio file."""
+    """Retrieve generated audio file from disk or memory."""
     from fastapi.responses import FileResponse
     import os
     
     audio_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_audio')
     file_path = os.path.join(audio_dir, f"{audio_id}.wav")
     
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Audio file not found")
+    if os.path.exists(file_path):
+        return FileResponse(
+            path=file_path,
+            media_type="audio/wav",
+            filename=f"{audio_id}.wav"
+        )
     
-    return FileResponse(
-        path=file_path,
-        media_type="audio/wav",
-        filename=f"{audio_id}.wav"
-    )
+    if audio_id in in_memory_audio:
+        return Response(
+            content=in_memory_audio[audio_id],
+            media_type="audio/wav",
+            headers={"Content-Disposition": f"attachment; filename={audio_id}.wav"}
+        )
+    
+    raise HTTPException(status_code=404, detail="Audio file not found")
 
 @app.get("/transcript/{transcript_id}")
 async def get_transcript_file(transcript_id: str):
-    """Retrieve generated transcript file."""
+    """Retrieve generated transcript file from disk or memory."""
     from fastapi.responses import FileResponse
     import os
     
     transcript_dir = os.path.join(os.path.dirname(__file__), '..', 'generated_transcripts')
     file_path = os.path.join(transcript_dir, f"{transcript_id}.txt")
     
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Transcript file not found")
+    if os.path.exists(file_path):
+        return FileResponse(
+            path=file_path,
+            media_type="text/plain",
+            filename=f"{transcript_id}.txt"
+        )
     
-    return FileResponse(
-        path=file_path,
-        media_type="text/plain",
-        filename=f"{transcript_id}.txt"
-    )
+    if transcript_id in in_memory_transcripts:
+        return Response(
+            content=in_memory_transcripts[transcript_id],
+            media_type="text/plain",
+            headers={"Content-Disposition": f"attachment; filename={transcript_id}.txt"}
+        )
+    
+    raise HTTPException(status_code=404, detail="Transcript file not found")
 
 @app.get("/scenarios")
 async def get_available_scenarios():

@@ -40,8 +40,8 @@ class AudioGenerator:
         else:
             return 'female'
 
-    def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None) -> Optional[Union[str, bytes]]:
-        """Generate audio file from transcript. Returns file path if audio_id provided, otherwise bytes."""
+    def generate_audio(self, transcript: str, audio_settings: Dict, audio_id: Optional[str] = None, save_locally: bool = True) -> Optional[Union[str, bytes]]:
+        """Generate audio file from transcript. Returns file path if saving locally and audio_id provided, otherwise bytes."""
         try:
             segments = self._parse_transcript(transcript)
 
@@ -74,7 +74,7 @@ class AudioGenerator:
             final_audio = self._apply_audio_settings(combined_audio, audio_settings)
             print(f"Debug: Audio settings applied - Final length: {len(final_audio)}ms")
 
-            if audio_id:
+            if audio_id and save_locally:
                 result = self._save_to_file(final_audio, audio_settings, audio_id)
                 print(f"Debug: File saved to: {result}")
                 return result

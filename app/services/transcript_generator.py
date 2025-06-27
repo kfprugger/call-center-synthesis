@@ -217,14 +217,9 @@ class TranscriptGenerator:
         
         return '\n'.join(transcript_parts)
     
-    def save_transcript_to_file(self, transcript_data: Dict[str, Any], transcript_id: str) -> str:
-        """Save transcript to file and return file path."""
+    def save_transcript_to_file(self, transcript_data: Dict[str, Any], transcript_id: str, save_locally: bool = True) -> Dict[str, Any]:
+        """Save transcript to file if save_locally=True and return transcript info with content."""
         import os
-        
-        transcript_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'generated_transcripts')
-        os.makedirs(transcript_dir, exist_ok=True)
-        
-        file_path = os.path.join(transcript_dir, f"{transcript_id}.txt")
         
         content = f"Contoso Call Center Transcript\n"
         content += f"Generated: {transcript_data['metadata']['generated_at']}\n"
@@ -235,7 +230,21 @@ class TranscriptGenerator:
         content += f"\n{'='*50}\n\n"
         content += transcript_data['transcript']
         
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(content)
+        result = {
+            'transcript_id': transcript_id,
+            'content': content,
+            'file_path': None
+        }
         
-        return file_path
+        if save_locally:
+            transcript_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'generated_transcripts')
+            os.makedirs(transcript_dir, exist_ok=True)
+            
+            file_path = os.path.join(transcript_dir, f"{transcript_id}.txt")
+            
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            result['file_path'] = file_path
+        
+        return result
