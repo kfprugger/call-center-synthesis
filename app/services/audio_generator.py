@@ -242,19 +242,29 @@ class AudioGenerator:
         return audio
 
     def _to_wav_bytes(self, audio: AudioSegment, settings: Dict) -> bytes:
-        """Convert AudioSegment to WAV bytes."""
+        """Convert AudioSegment to WAV bytes with Windows-compatible fallback."""
 
         wav_buffer = io.BytesIO()
 
-        audio.export(
-            wav_buffer,
-            format="wav",
-            parameters=[
-                "-acodec", "pcm_s16le",  # 16-bit PCM
-                "-ar", str(settings.get('sampling_rate', 16000)),  # Sample rate
-                "-ac", str(settings.get('channels', 1))  # Channels
-            ]
-        )
+        try:
+            print("Debug: Attempting direct WAV export to bytes (no ffmpeg dependency)...")
+            audio.export(wav_buffer, format="wav")
+            print("Debug: Direct WAV export to bytes successful")
+        except Exception as direct_error:
+            print(f"Debug: Direct WAV export to bytes failed: {direct_error}")
+            print("Debug: Trying WAV export to bytes with explicit parameters (requires ffmpeg)...")
+            
+            wav_buffer = io.BytesIO()  # Reset buffer
+            audio.export(
+                wav_buffer,
+                format="wav",
+                parameters=[
+                    "-acodec", "pcm_s16le",  # 16-bit PCM
+                    "-ar", str(settings.get('sampling_rate', 16000)),  # Sample rate
+                    "-ac", str(settings.get('channels', 1))  # Channels
+                ]
+            )
+            print("Debug: Parametric WAV export to bytes successful")
 
         wav_buffer.seek(0)
         return wav_buffer.getvalue()
