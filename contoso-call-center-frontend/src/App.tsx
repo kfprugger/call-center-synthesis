@@ -25,6 +25,7 @@ interface AudioSettings {
   sampling_rate: number
   channels: number
   generate_audio: boolean
+  save_audio_locally: boolean
 }
 
 interface CallGenerationRequest {
@@ -33,6 +34,7 @@ interface CallGenerationRequest {
   duration: string
   num_calls: number
   audio_settings: AudioSettings
+  save_transcripts_locally: boolean
 }
 
 interface GeneratedCall {
@@ -65,6 +67,8 @@ function App() {
   const [duration, setDuration] = useState<string>('medium')
   const [numCalls, setNumCalls] = useState<number>(5)
   const [generateAudio, setGenerateAudio] = useState<boolean>(true)
+  const [saveAudioLocally, setSaveAudioLocally] = useState<boolean>(true)
+  const [saveTranscriptsLocally, setSaveTranscriptsLocally] = useState<boolean>(true)
   const [samplingRate, setSamplingRate] = useState<number>(16000)
   const [channels, setChannels] = useState<number>(1)
   const [isGenerating, setIsGenerating] = useState<boolean>(false)
@@ -112,8 +116,10 @@ function App() {
       audio_settings: {
         sampling_rate: samplingRate,
         channels,
-        generate_audio: generateAudio
-      }
+        generate_audio: generateAudio,
+        save_audio_locally: saveAudioLocally
+      },
+      save_transcripts_locally: saveTranscriptsLocally
     }
 
     try {
@@ -297,6 +303,23 @@ ${JSON.stringify(call.transcript_data.synthetic_data, null, 2)}
                     className="mt-1"
                   />
                 </div>
+
+                <Separator />
+
+                {/* Local File Output Settings */}
+                <div>
+                  <Label className="text-base font-semibold">Local File Output</Label>
+                  <div className="mt-3 space-y-3">
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        id="saveTranscriptsLocally"
+                        checked={saveTranscriptsLocally}
+                        onCheckedChange={setSaveTranscriptsLocally}
+                      />
+                      <Label htmlFor="saveTranscriptsLocally">Save Transcript Files Locally</Label>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
@@ -317,6 +340,17 @@ ${JSON.stringify(call.transcript_data.synthetic_data, null, 2)}
                   />
                   <Label htmlFor="generateAudio">Generate Audio Files (.wav)</Label>
                 </div>
+
+                {generateAudio && (
+                  <div className="flex items-center space-x-2 pl-6">
+                    <Switch
+                      id="saveAudioLocally"
+                      checked={saveAudioLocally}
+                      onCheckedChange={setSaveAudioLocally}
+                    />
+                    <Label htmlFor="saveAudioLocally">Save Audio Files Locally</Label>
+                  </div>
+                )}
 
                 {generateAudio && (
                   <div className="space-y-4 pl-6 border-l-2 border-blue-200">
