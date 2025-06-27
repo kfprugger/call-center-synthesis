@@ -1,0 +1,20 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:20:10.399870
+Scenario: healthcare_provider
+Sentiment: positive
+Duration: 7 minutes
+Participants: Agent, Dr. Brown
+
+==================================================
+
+Agent: Thank you for calling Contoso Medical, this is William. How can I help you today?
+Dr. Brown: Hi, this is Dr. Brown from Contoso Women's Health. I'm calling about a patient encounter and need to verify some information.
+Agent: Of course, Dr. Brown. I'd be happy to help. Can you provide me with the patient's information?
+Dr. Brown: Yes, the patient's name is Jeremy Hubbard, date of birth 05/29/1940, and patient ID CTM362689.
+Agent: Thank you. Let me pull up that record... I see the patient here. What specific information do you need?
+Dr. Brown: I need to confirm the details from their visit on 06/03/2025. We're reviewing the Hypertension diagnosis and treatment plan.
+Agent: Absolutely, I can see that visit. The patient was seen for Hypertension and the treatment plan was documented thoroughly.
+Dr. Brown: Perfect, that matches our records. The patient has been responding well to the treatment.
+Agent: That's wonderful to hear. Is there anything else you need regarding this patient's care?
+Dr. Brown: No, that covers everything. Thank you for your help.
+Agent: You're very welcome, Dr. Brown. Have a great day!

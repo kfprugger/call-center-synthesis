@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:20:10.400861
+Scenario: patient_visit
+Sentiment: negative
+Duration: 7 minutes
+Participants: Agent, Jasmin Romero
+
+==================================================
+
+Agent: Good morning, Contoso Medical, this is Misty. How may I assist you?
+Jasmin Romero: Hi, I'm calling about my recent visit to Contoso Family Clinic on 06/14/2025.
+Agent: Hello, Jasmin Romero. I'd be happy to help you with questions about your visit. Can you verify your date of birth for me?
+Jasmin Romero: Yes, it's 10/04/1952.
+Agent: Thank you. I have your record here. What questions do you have about your visit?
+Jasmin Romero: I'm very upset about my experience. I waited over three hours to be seen.
+Agent: I'm so sorry to hear about the long wait time. That's definitely not the experience we want for our patients.
+Jasmin Romero: And then the doctor seemed rushed and didn't explain my Asthma properly.
+Agent: I sincerely apologize. Let me connect you with our patient advocate to address these concerns.
+Jasmin Romero: I also received a bill that seems incorrect. The charges don't match what I was told.
+Agent: I understand your frustration. I'm going to have both our billing department and patient advocate reach out to you today.
+Jasmin Romero: This whole experience has been disappointing. I expected better from Contoso Medical.
+Agent: You have every right to be upset, and we're going to make this right. You'll hear from us within 24 hours.

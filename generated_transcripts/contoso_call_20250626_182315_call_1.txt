@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:23:15.290892
+Scenario: patient_visit
+Sentiment: neutral
+Duration: 3 minutes
+Participants: Agent, Melinda Wade
+
+==================================================
+
+Agent: Good morning, Contoso Medical, this is Melissa. How may I assist you?
+Melinda Wade: Hi, I'm calling about my recent visit to Contoso Pediatric Center on 06/20/2025.
+Agent: Hello, Melinda Wade. I'd be happy to help you with questions about your visit. Can you verify your date of birth for me?
+Melinda Wade: Yes, it's 03/24/1960.
+Agent: Thank you. I have your record here. What questions do you have about your visit?
+Melinda Wade: I have some questions about the test results from my visit.
+Agent: Of course. I can see you had some lab work done. What specific questions do you have?
+Melinda Wade: The doctor mentioned my Osteoporosis but I'd like to understand the next steps better.
+Agent: Let me review your chart... I see you have a follow-up appointment scheduled. Would you like me to go over the treatment plan?
+Melinda Wade: Yes, that would be helpful. Also, when should I expect the prescription to start working?
+Agent: Based on your medication, you should start seeing improvement within 8 days.
+Melinda Wade: Okay, and what if I don't see improvement by then?
+Agent: In that case, please call us or contact Dr. Mitchell's office directly.

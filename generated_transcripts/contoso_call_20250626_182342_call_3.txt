@@ -1,0 +1,23 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:23:42.022429
+Scenario: healthcare_provider
+Sentiment: neutral
+Duration: 3 minutes
+Participants: Agent, Dr. Warren
+
+==================================================
+
+Agent: Thank you for calling Contoso Medical, this is Christopher. How can I help you today?
+Dr. Warren: Hi, this is Dr. Warren from Contoso Women's Health. I'm calling about a patient encounter and need to verify some information.
+Agent: Of course, Dr. Warren. I'd be happy to help. Can you provide me with the patient's information?
+Dr. Warren: Yes, the patient's name is Kevin Wright, date of birth 11/02/1960, and patient ID CTM703392.
+Agent: Thank you. Let me pull up that record... I see the patient here. What specific information do you need?
+Dr. Warren: I need to confirm the details from their visit on 06/22/2025. We're reviewing the Back Pain diagnosis and treatment plan.
+Agent: I can confirm the visit details. The patient was treated for Back Pain as documented.
+Dr. Warren: Good. I also need to verify the prescribed medications from that visit.
+Agent: Let me check the medication list... I see Fluoxetine was prescribed.
+Dr. Warren: That's correct. Can you email me a copy of the complete visit summary?
+Agent: Certainly. I'll send that to your registered email address within the next few minutes.
+Dr. Warren: Thank you. That should be everything I need.
+Agent: You're welcome. Is there anything else I can help you with today?
+Dr. Warren: No, that covers it. Thank you for your assistance.

@@ -1,0 +1,22 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:20:10.398832
+Scenario: patient_visit
+Sentiment: positive
+Duration: 5 minutes
+Participants: Agent, Leslie Valdez
+
+==================================================
+
+Agent: Good morning, Contoso Medical, this is Sandra. How may I assist you?
+Leslie Valdez: Hi, I'm calling about my recent visit to Contoso Emergency Care on 06/10/2025.
+Agent: Hello, Leslie Valdez. I'd be happy to help you with questions about your visit. Can you verify your date of birth for me?
+Leslie Valdez: Yes, it's 01/28/1975.
+Agent: Thank you. I have your record here. What questions do you have about your visit?
+Leslie Valdez: I wanted to thank the staff for the excellent care I received. Everyone was so professional.
+Agent: That's wonderful to hear! I'm so glad you had a positive experience with our team.
+Leslie Valdez: The doctor explained everything clearly about my Hypothyroidism and the treatment options.
+Agent: Dr. Pennington is excellent. Is there anything specific about your treatment plan you'd like to discuss?
+Leslie Valdez: Actually, I'm feeling much better already. The medication is working well.
+Agent: That's fantastic news! Please continue following the treatment plan as prescribed.
+Leslie Valdez: I will. Thank you for everything.
+Agent: You're very welcome. Don't hesitate to call if you have any other questions.

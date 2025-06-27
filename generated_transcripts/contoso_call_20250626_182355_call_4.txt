@@ -1,0 +1,23 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:23:55.230191
+Scenario: healthcare_provider
+Sentiment: neutral
+Duration: 7 minutes
+Participants: Agent, Dr. Mejia
+
+==================================================
+
+Agent: Thank you for calling Contoso Medical, this is Emily. How can I help you today?
+Dr. Mejia: Hi, this is Dr. Mejia from Contoso Family Clinic. I'm calling about a patient encounter and need to verify some information.
+Agent: Of course, Dr. Mejia. I'd be happy to help. Can you provide me with the patient's information?
+Dr. Mejia: Yes, the patient's name is Eugene Roth, date of birth 10/03/1955, and patient ID CTM249226.
+Agent: Thank you. Let me pull up that record... I see the patient here. What specific information do you need?
+Dr. Mejia: I need to confirm the details from their visit on 06/18/2025. We're reviewing the COPD diagnosis and treatment plan.
+Agent: I can confirm the visit details. The patient was treated for COPD as documented.
+Dr. Mejia: Good. I also need to verify the prescribed medications from that visit.
+Agent: Let me check the medication list... I see Losartan was prescribed.
+Dr. Mejia: That's correct. Can you email me a copy of the complete visit summary?
+Agent: Certainly. I'll send that to your registered email address within the next few minutes.
+Dr. Mejia: Thank you. That should be everything I need.
+Agent: You're welcome. Is there anything else I can help you with today?
+Dr. Mejia: No, that covers it. Thank you for your assistance.

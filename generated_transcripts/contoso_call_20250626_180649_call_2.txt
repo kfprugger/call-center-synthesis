@@ -1,0 +1,20 @@
+Contoso Call Center Transcript
+Generated: 2025-06-26T18:06:49.765034
+Scenario: healthcare_provider
+Sentiment: positive
+Duration: 4 minutes
+Participants: Agent, Dr. Ramirez
+
+==================================================
+
+Agent: Thank you for calling Contoso Medical, this is Michael. How can I help you today?
+Dr. Ramirez: Hi, this is Dr. Ramirez from Contoso Urgent Care. I'm calling about a patient encounter and need to verify some information.
+Agent: Of course, Dr. Ramirez. I'd be happy to help. Can you provide me with the patient's information?
+Dr. Ramirez: Yes, the patient's name is Debbie Walton, date of birth 01/16/1952, and patient ID CTM898234.
+Agent: Thank you. Let me pull up that record... I see the patient here. What specific information do you need?
+Dr. Ramirez: I need to confirm the details from their visit on 06/10/2025. We're reviewing the Osteoporosis diagnosis and treatment plan.
+Agent: Absolutely, I can see that visit. The patient was seen for Osteoporosis and the treatment plan was documented thoroughly.
+Dr. Ramirez: Perfect, that matches our records. The patient has been responding well to the treatment.
+Agent: That's wonderful to hear. Is there anything else you need regarding this patient's care?
+Dr. Ramirez: No, that covers everything. Thank you for your help.
+Agent: You're very welcome, Dr. Ramirez. Have a great day!
