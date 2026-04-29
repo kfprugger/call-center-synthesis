@@ -13,9 +13,9 @@ faker = "^37.4.0"
 pydub = "^0.25.1"
 numpy = "^2.3.1"
 scipy = "^1.16.0"
-python-multipart = "^0.0.20"
+python-multipart = "^0.0.26"
 azure-cognitiveservices-speech = "^1.44.0"
-python-dotenv = "^1.1.1"
+python-dotenv = "^1.2.2"
 gender-guesser = "^0.4.0"
 
 
