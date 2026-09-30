@@ -19,9 +19,9 @@ This guide provides step-by-step instructions for setting up and running the Con
   - API Key: Required for text-to-speech functionality
 
 ### System Requirements
-- **Python**: 3.8 or higher
-- **Node.js**: 16 or higher
-- **npm** or **yarn**: For frontend package management
+- **Python**: 3.12 (required by the current audio stack)
+- **Node.js**: 22 or newer
+- **npm**: Use `npm ci` with the committed frontend lockfile
 
 ---
 
@@ -30,7 +30,7 @@ This guide provides step-by-step instructions for setting up and running the Con
 ### 1. Install System Dependencies
 
 #### Install Python
-1. Download Python 3.8+ from [python.org](https://www.python.org/downloads/)
+1. Download Python 3.12 from [python.org](https://www.python.org/downloads/)
 2. During installation, check "Add Python to PATH"
 3. Verify installation:
    ```cmd
@@ -39,7 +39,7 @@ This guide provides step-by-step instructions for setting up and running the Con
    ```
 
 #### Install Node.js
-1. Download Node.js 16+ from [nodejs.org](https://nodejs.org/)
+1. Download Node.js 22+ from [nodejs.org](https://nodejs.org/)
 2. Install with default settings
 3. Verify installation:
    ```cmd
@@ -56,7 +56,7 @@ This guide provides step-by-step instructions for setting up and running the Con
 ```cmd
 # Clone the repository
 git clone <repository-url>
-cd contoso-call-center-backend
+cd call-center-synthesis
 
 # Create virtual environment
 python -m venv venv
@@ -82,10 +82,10 @@ AZURE_SPEECH_ENDPOINT=https://westus3.api.cognitive.microsoft.com/
 
 ```cmd
 # Navigate to frontend directory
-cd ..\contoso-call-center-frontend
+cd contoso-call-center-frontend
 
 # Install dependencies
-npm install
+npm ci
 
 # Create environment file
 copy .env.example .env
@@ -100,7 +100,7 @@ VITE_API_URL=http://localhost:8000
 
 #### Start Backend (in one terminal)
 ```cmd
-cd contoso-call-center-backend
+cd call-center-synthesis
 venv\Scripts\activate
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -130,7 +130,7 @@ sudo apt update
 sudo apt install python3 python3-pip python3-venv -y
 
 # Install Node.js and npm
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install nodejs -y
 
 # Install Git
@@ -153,7 +153,7 @@ ffmpeg -version
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd contoso-call-center-backend
+cd call-center-synthesis
 
 # Create virtual environment
 python3 -m venv venv
@@ -184,10 +184,10 @@ AZURE_SPEECH_ENDPOINT=https://westus3.api.cognitive.microsoft.com/
 
 ```bash
 # Navigate to frontend directory
-cd ../contoso-call-center-frontend
+cd contoso-call-center-frontend
 
 # Install dependencies
-npm install
+npm ci
 
 # Create environment file
 cp .env.example .env
@@ -207,7 +207,7 @@ VITE_API_URL=http://localhost:8000
 
 #### Start Backend (in one terminal)
 ```bash
-cd contoso-call-center-backend
+cd call-center-synthesis
 source venv/bin/activate
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
@@ -279,7 +279,7 @@ az webapp create \
   --resource-group contoso-call-center-rg \
   --plan contoso-call-center-plan \
   --name contoso-call-center-backend \
-  --runtime "PYTHON|3.11" \
+  --runtime "PYTHON|3.12" \
   --startup-file startup.sh
 
 # Configure app settings
@@ -293,11 +293,11 @@ az webapp config appsettings set \
     SCM_DO_BUILD_DURING_DEPLOYMENT=true
 
 # Deploy code
-cd contoso-call-center-backend
+cd call-center-synthesis
 az webapp up \
   --resource-group contoso-call-center-rg \
   --name contoso-call-center-backend \
-  --runtime "PYTHON|3.11"
+  --runtime "PYTHON|3.12"
 ```
 
 ### 3. Deploy Frontend
@@ -310,6 +310,7 @@ cd contoso-call-center-frontend
 echo "VITE_API_URL=https://contoso-call-center-backend.azurewebsites.net" > .env
 
 # Build the application
+npm ci
 npm run build
 ```
 

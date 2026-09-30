@@ -57,46 +57,44 @@ This application is designed for training, testing, and demonstration purposes i
 ## 📁 Project Structure
 
 ```
-cc-proj/
-├── contoso-call-center-backend/     # FastAPI backend
-│   ├── app/
-│   │   ├── main.py                  # FastAPI application
-│   │   ├── models.py                # Data models
-│   │   └── services/
-│   │       ├── transcript_generator.py  # Conversation generation
-│   │       ├── audio_generator.py       # Azure Speech integration
-│   │       └── data_generator.py        # Synthetic data creation
-│   ├── generated_audio/             # Generated .wav files
-│   ├── generated_transcripts/       # Generated .txt files
-│   └── pyproject.toml              # Python dependencies
-├── contoso-call-center-frontend/    # React frontend
-│   ├── src/
-│   │   ├── App.tsx                 # Main application component
-│   │   └── components/             # UI components
-│   └── package.json                # Node.js dependencies
-└── README.md                       # This file
+call-center-synthesis/
+├── app/                           # FastAPI backend
+│   ├── main.py                     # API entrypoint
+│   ├── models.py                   # Data models
+│   └── services/                  # Transcript, audio and synthetic data generation
+├── generated_audio/               # Generated .wav files
+├── generated_transcripts/         # Generated .txt files
+├── pyproject.toml                  # Python dependency declarations
+├── poetry.lock                     # Reproducible Python dependency versions
+├── requirements.txt                # Alternative pip installation with security floors
+├── contoso-call-center-frontend/
+│   ├── src/App.tsx                 # Main React component
+│   ├── src/components/             # UI components
+│   ├── package.json
+│   └── package-lock.json           # Reproducible frontend dependency versions
+└── README.md
 ```
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.12+
-- Node.js 18+
+- Python 3.12 (the audio library uses `audioop`, removed in Python 3.13)
+- Node.js 22 or newer
 - Azure Speech Services API key
 
 ### Backend Setup
 ```bash
-cd contoso-call-center-backend
-poetry install
-cp .env.example .env
-# Add your Azure Speech API key to .env
+cd call-center-synthesis
+poetry env use 3.12
+poetry sync
+# Set SPEECH_KEY in your local .env for Azure audio generation.
 poetry run fastapi dev app/main.py --host 0.0.0.0 --port 8000
 ```
 
 ### Frontend Setup
 ```bash
 cd contoso-call-center-frontend
-npm install
+npm ci
 npm run dev
 ```
 
@@ -104,6 +102,14 @@ npm run dev
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
+
+### Dependency security
+
+The September 2026 dependency refresh uses FastAPI 0.136.3 with patched Starlette 1.3.1, AnyIO 4.15.1, python-multipart 0.0.31 and Vite 6.4.3. The lockfiles also include the transitive security fixes. Use Poetry 2.5 or newer and `npm ci` to install those exact versions; the pip requirements enforce security minimums for alternative installations.
+
+FastAPI's `standard-no-fastapi-cloud-cli` extra retains the local `fastapi dev` and `fastapi run` commands without adding a cloud deployment client. Frontend `node_modules` is no longer tracked. Reinstall it from `package-lock.json` rather than copying an old dependency directory.
+
+Local verification covers generation for all three scenarios, disk and in-memory transcript downloads, existing WAV downloads and byte ranges, the React generation/download flow, and dependency audits. Azure speech synthesis requires a valid Speech key for the configured `westus3` region; an authentication rejection does not affect transcript-only generation.
 
 ## 🔧 Configuration
 
